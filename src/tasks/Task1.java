@@ -4,8 +4,10 @@ import common.Person;
 import common.PersonService;
 import common.Task;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,9 +21,16 @@ import java.util.stream.Collectors;
 public class Task1 implements Task {
 
   // !!! Редактируйте этот метод !!!
+  // асимптотика: преобразование списка в мапу - O(n)
+  // обход списка -  O(n), Map.get(...) - O(1), ArrayList.add(...) - O(1)
+  // Итого: O(n) + O(n) = O(n)
+  // По памяти O(n) дополнительно для хранения мапы
   private List<Person> findOrderedPersons(List<Integer> personIds) {
     Set<Person> persons = PersonService.findPersons(personIds);
-    return Collections.emptyList();
+    Map<Integer, Person> personMap = persons.stream().collect(Collectors.toMap(Person::getId, person -> person));
+
+    return personIds.stream().map(personMap::get)
+            .collect(Collectors.toList());
   }
 
   @Override
